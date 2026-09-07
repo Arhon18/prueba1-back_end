@@ -1,20 +1,31 @@
 /* ==========================================================================
    Estilos Personalizados - Agenda de Contactos Personal
-   Paleta: Índigo / Slate moderna, diseño responsive y limpio
+   Tema: FIESTAS PATRIAS DE CHILE 🇨🇱
+   Colores Oficiales: Azul Rey (#0039A6), Blanco (#FFFFFF), Rojo Chileno (#D52B1E)
    ========================================================================== */
 
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --primary-light: #eef2ff;
-    --secondary-color: #0ea5e9;
-    --dark-surface: #0f172a;
+    /* Paleta Patriótica Chilena */
+    --chile-blue: #0039A6;
+    --chile-blue-dark: #002266;
+    --chile-blue-light: #e8f0fe;
+    --chile-red: #D52B1E;
+    --chile-red-hover: #b01e13;
+    --chile-red-light: #fdedec;
+    --chile-white: #ffffff;
+    --chile-gold: #f59e0b;
+
+    --primary-color: var(--chile-blue);
+    --primary-hover: var(--chile-blue-dark);
+    --primary-light: var(--chile-blue-light);
+    --secondary-color: var(--chile-red);
+    
     --bg-body: #f8fafc;
-    --text-primary: #1e293b;
+    --text-primary: #0f172a;
     --text-muted: #64748b;
     --card-border: #e2e8f0;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.09), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --card-shadow: 0 4px 10px rgba(0, 57, 166, 0.08), 0 2px 4px rgba(213, 43, 30, 0.04);
+    --card-shadow-hover: 0 12px 20px -3px rgba(0, 57, 166, 0.15), 0 4px 6px -2px rgba(213, 43, 30, 0.08);
     --radius-default: 0.85rem;
 }
 
@@ -27,20 +38,65 @@ body {
     flex-direction: column;
 }
 
-/* Navbar */
+/* Cinta Tricolor Superior */
+.tricolor-stripe {
+    height: 4px;
+    background: linear-gradient(
+        to right,
+        var(--chile-blue) 0%,
+        var(--chile-blue) 35%,
+        #ffffff 35%,
+        #ffffff 50%,
+        var(--chile-red) 50%,
+        var(--chile-red) 100%
+    );
+    width: 100%;
+}
+
+/* Navbar Patriótico */
 .navbar-custom {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-    box-shadow: 0 4px 20px rgba(30, 27, 75, 0.15);
+    background: linear-gradient(135deg, #001f5c 0%, #0039A6 60%, #0b2e6f 100%);
+    box-shadow: 0 4px 20px rgba(0, 31, 92, 0.25);
+    border-bottom: 3px solid var(--chile-red);
 }
 
 .navbar-brand {
     font-weight: 700;
-    letter-spacing: -0.5px;
-    font-size: 1.25rem;
+    letter-spacing: -0.3px;
+    font-size: 1.3rem;
 }
 
-.navbar-brand i {
-    color: #38bdf8;
+.chile-star-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #002266;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.chile-star-badge i {
+    color: #ffffff;
+    font-size: 1rem;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+/* Insignia Fiestas Patrias */
+.fiestas-patrias-pill {
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(213,43,30,0.2) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 /* Tarjetas y Contenedores */
@@ -49,15 +105,31 @@ body {
     border: 1px solid var(--card-border);
     border-radius: var(--radius-default);
     box-shadow: var(--card-shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--chile-blue) 0%, #cbd5e1 50%, var(--chile-red) 100%);
+    opacity: 0.9;
 }
 
 .custom-card:hover {
+    transform: translateY(-2px);
     box-shadow: var(--card-shadow-hover);
+    border-color: #93c5fd;
 }
 
+/* Cabecera con degradado Patriótico */
 .card-header-gradient {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #002b7f 0%, #0039A6 65%, #c81d25 100%);
     color: #ffffff;
     border-top-left-radius: var(--radius-default) !important;
     border-top-right-radius: var(--radius-default) !important;
@@ -72,14 +144,14 @@ body {
 .search-input {
     border-radius: 50rem;
     padding: 0.75rem 1.25rem 0.75rem 2.75rem;
-    border: 1.5px solid #cbd5e1;
+    border: 1.5px solid #94a3b8;
     font-size: 0.95rem;
     transition: all 0.2s ease;
 }
 
 .search-input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    border-color: var(--chile-blue);
+    box-shadow: 0 0 0 4px rgba(0, 57, 166, 0.15);
 }
 
 .search-icon {
@@ -87,61 +159,79 @@ body {
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-muted);
+    color: var(--chile-blue);
     pointer-events: none;
+    font-size: 1.1rem;
 }
 
-/* Avatares y Letras iniciales */
+/* Avatares y Letras iniciales Patrióticas */
 .contact-avatar {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+    background: linear-gradient(135deg, var(--chile-blue) 0%, var(--chile-red) 100%);
     color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+    font-size: 1.15rem;
+    box-shadow: 0 3px 6px rgba(0, 57, 166, 0.3);
+    border: 2px solid #ffffff;
 }
 
 .contact-avatar-lg {
-    width: 72px;
-    height: 72px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+    background: linear-gradient(135deg, var(--chile-blue) 0%, var(--chile-red) 100%);
     color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.8rem;
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    font-size: 2rem;
+    box-shadow: 0 6px 14px rgba(0, 57, 166, 0.35);
+    border: 3px solid #ffffff;
 }
 
-/* Botones con estilo moderno */
+/* Botones con estilo Fiestas Patrias */
 .btn-primary-custom {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: var(--chile-blue);
+    border-color: var(--chile-blue);
     color: #ffffff;
     font-weight: 600;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.6rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.65rem;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 57, 166, 0.2);
 }
 
 .btn-primary-custom:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background-color: var(--chile-blue-dark);
+    border-color: var(--chile-blue-dark);
     color: #ffffff;
     transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 57, 166, 0.3);
+}
+
+.btn-chile-red {
+    background-color: var(--chile-red);
+    border-color: var(--chile-red);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-chile-red:hover {
+    background-color: var(--chile-red-hover);
+    border-color: var(--chile-red-hover);
+    color: #ffffff;
 }
 
 /* Formulario */
 .form-label {
     font-weight: 600;
-    color: #334155;
+    color: #1e293b;
     margin-bottom: 0.4rem;
     font-size: 0.9rem;
 }
@@ -155,8 +245,19 @@ body {
 }
 
 .form-control:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    border-color: var(--chile-blue);
+    box-shadow: 0 0 0 3.5px rgba(0, 57, 166, 0.15);
+}
+
+/* Badges Patrióticos */
+.badge-chile-blue {
+    background-color: var(--chile-blue);
+    color: #ffffff;
+}
+
+.badge-chile-red {
+    background-color: var(--chile-red);
+    color: #ffffff;
 }
 
 /* Mensajes de Alerta */
@@ -167,12 +268,23 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Footer */
+/* Footer Patriótico */
 footer {
     margin-top: auto;
-    background-color: #ffffff;
-    border-top: 1px solid var(--card-border);
-    padding: 1.5rem 0;
+    background: #ffffff;
+    border-top: 3px solid var(--chile-blue);
+    padding: 1.75rem 0;
     color: var(--text-muted);
     font-size: 0.875rem;
+    position: relative;
+}
+
+footer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--chile-red);
 }
