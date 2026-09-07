@@ -12,6 +12,9 @@ from django import forms
 from django.core.exceptions import ValidationError
 # [Criterio 1.1.3] Uso de paquete externo 'email-validator'
 from email_validator import validate_email, EmailNotValidError
+# [Criterio 1.1.3] Uso de paquete externo 'phonenumbers'
+import phonenumbers
+from phonenumbers import NumberParseException
 
 from .models import Contacto
 
@@ -33,7 +36,7 @@ class ContactoForm(forms.ModelForm):
             }),
             'telefono': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Ej. +56 9 8765 4321',
+                'placeholder': 'Ej. +56 9 8765 4321 o +1 415 555 2671',
                 'required': True,
             }),
             'correo': forms.EmailInput(attrs={
@@ -70,23 +73,55 @@ class ContactoForm(forms.ModelForm):
 
     def clean_telefono(self):
         """
-        [Criterio 1.1.1 y 1.1.2] Validación y limpieza de teléfono.
-        Uso de operadores de pertenencia (in) y condicionales.
+        [Criterio 1.1.2 y 1.1.3] Validación y normalización con paquete externo 'phonenumbers'.
+        Reglas de negocio:
+        1. Números Chilenos: Se aceptan con prefijo '+56' o formato nacional (9 dígitos, ej: 912345678).
+        2. Números Extranjeros: Es OBLIGATORIO que comiencen con '+' seguido del código de país (ej: +1..., +34...).
+        3. Siempre se normaliza y guarda en formato estándar internacional: '+56 9 8765 4321'.
         """
-        telefono = self.cleaned_data.get('telefono', '').strip()
+        telefono_raw = self.cleaned_data.get('telefono', '').strip()
 
-        # Operación: filtrar solo dígitos y símbolo '+'
-        caracteres_permitidos = "0123456789+ -()"
-        for char in telefono:
-            if char not in caracteres_permitidos:
-                raise ValidationError(f"El teléfono contiene caracteres no permitidos: '{char}'")
+        if not telefono_raw:
+            raise ValidationError("El número telefónico es obligatorio.")
 
-        # Contar dígitos reales usando comprensión y función del lenguaje
-        digitos = [c for c in telefono if c.isdigit()]
-        if len(digitos) < 8 or len(digitos) > 15:
-            raise ValidationError("El número telefónico debe contener entre 8 y 15 dígitos.")
-
-        return telefono
+        # Estructura de decisión: Comprobar si incluye prefijo internacional '+'
+        if telefono_raw.startswith('+'):
+            # Validación para números con código de país explícito (Chile con +56 o extranjero)
+            try:
+                numero_parseado = phonenumbers.parse(telefono_raw, None)
+                if not phonenumbers.is_valid_number(numero_parseado):
+                    raise ValidationError(
+                        "Número internacional no válido. Verifica el código de país y la cantidad de dígitos."
+                    )
+                # Formato internacional estandarizado (+56 9 1234 5678, +1 415 555 2671)
+                return phonenumbers.format_number(
+                    numero_parseado,
+                    phonenumbers.PhoneNumberFormat.INTERNATIONAL
+                )
+            except NumberParseException:
+                raise ValidationError(
+                    "Formato de número internacional inválido. Debe iniciar con '+' y su código de país (ej: +56 9 8765 4321 o +1 415 555 2671)."
+                )
+        else:
+            # No incluye '+'. Solo se permite si es un número válido chileno (móvil o fijo)
+            try:
+                numero_parseado = phonenumbers.parse(telefono_raw, "CL")
+                # Comprobar si es un número válido chileno (código de país 56)
+                if phonenumbers.is_valid_number(numero_parseado) and numero_parseado.country_code == 56:
+                    return phonenumbers.format_number(
+                        numero_parseado,
+                        phonenumbers.PhoneNumberFormat.INTERNATIONAL
+                    )
+                else:
+                    raise ValidationError(
+                        "Número inválido. Si es un número chileno, debe tener 9 dígitos (ej: 912345678). "
+                        "Si es un número extranjero, DEBE comenzar obligatoriamente con '+' y el código de país (ej: +1 415 555 2671)."
+                    )
+            except NumberParseException:
+                raise ValidationError(
+                    "Número de teléfono inválido. Para números extranjeros debes incluir '+' y el código de país. "
+                    "Para números chilenos ingresa 9 dígitos (ej: 912345678 o +56 9 1234 5678)."
+                )
 
     def clean_correo(self):
         """

@@ -8,6 +8,8 @@ Cumplimiento de Criterios:
 """
 
 from django.db import models
+import phonenumbers
+from phonenumbers import NumberParseException
 
 
 class Contacto(models.Model):
@@ -21,9 +23,9 @@ class Contacto(models.Model):
         help_text="Nombre y apellido del contacto"
     )
     telefono = models.CharField(
-        max_length=25,
+        max_length=30,
         verbose_name="Teléfono",
-        help_text="Número telefónico de contacto (ej: +56 9 1234 5678)"
+        help_text="Número chileno (+56 9...) o extranjero obligatorio con prefijo '+' (ej: +1...)"
     )
     correo = models.EmailField(
         max_length=150,
@@ -56,12 +58,25 @@ class Contacto(models.Model):
     def clean(self):
         """
         Normalización de datos antes de guardar.
-        Operaciones básicas de strings (strip, title, lower).
+        Operaciones básicas de strings y normalización telefónica con phonenumbers.
         """
         if self.nombre:
-            self.nombre = self.nombre.strip()
+            self.nombre = self.nombre.strip().title()
         if self.telefono:
-            self.telefono = self.telefono.strip()
+            tel_clean = self.telefono.strip()
+            try:
+                if tel_clean.startswith('+'):
+                    p = phonenumbers.parse(tel_clean, None)
+                else:
+                    p = phonenumbers.parse(tel_clean, "CL")
+                if phonenumbers.is_valid_number(p):
+                    self.telefono = phonenumbers.format_number(
+                        p, phonenumbers.PhoneNumberFormat.INTERNATIONAL
+                    )
+                else:
+                    self.telefono = tel_clean
+            except NumberParseException:
+                self.telefono = tel_clean
         if self.correo:
             self.correo = self.correo.strip().lower()
         if self.direccion:

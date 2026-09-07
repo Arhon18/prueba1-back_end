@@ -91,17 +91,83 @@ class ContactoFormValidationTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('nombre', form.errors)
 
-    def test_telefono_caracteres_invalidos(self):
-        """Verifica que caracteres no numéricos prohibidos en teléfono sean rechazados."""
+    def test_telefono_chileno_con_prefijo(self):
+        """Verifica que un número chileno con +56 sea aceptado y validado."""
         datos = {
             'nombre': 'Martín Silva',
-            'telefono': 'telefono_invalido_abc',
-            'correo': 'valido@correo.cl',
-            'direccion': 'Calle Principal 100'
+            'telefono': '+56 9 8765 4321',
+            'correo': 'martin.silva@dominio.cl',
+            'direccion': 'Calle Las Flores 123, Providencia'
         }
         form = ContactoForm(data=datos)
-        self.assertFalse(form.is_valid())
-        self.assertIn('telefono', form.errors)
+        self.assertTrue(form.is_valid(), f"Errores: {form.errors}")
+        self.assertEqual(form.cleaned_data['telefono'], '+56 9 8765 4321')
+
+    def test_telefono_chileno_sin_prefijo_se_normaliza(self):
+        """Verifica que un número chileno de 9 dígitos sin +56 sea aceptado y normalizado con +56."""
+        datos = {
+            'nombre': 'Martín Silva',
+            'telefono': '987654321',
+            'correo': 'martin.silva@dominio.cl',
+            'direccion': 'Calle Las Flores 123, Providencia'
+        }
+        form = ContactoForm(data=datos)
+        self.assertTrue(form.is_valid(), f"Errores: {form.errors}")
+        # Comprobar que se guardó normalizado con el prefijo chileno +56
+        self.assertEqual(form.cleaned_data['telefono'], '+56 9 8765 4321')
+
+    def test_telefono_extranjero_con_prefijo_valido(self):
+        """Verifica que números extranjeros con '+' y código de país válido sean aceptados."""
+        telefonos_extranjeros = [
+            '+1 415 555 2671',      # Estados Unidos
+            '+34 612 345 678',      # España
+            '+54 9 11 2345 6789',   # Argentina
+        ]
+        for tel in telefonos_extranjeros:
+            with self.subTest(telefono=tel):
+                datos = {
+                    'nombre': 'Contacto Extranjero',
+                    'telefono': tel,
+                    'correo': 'extranjero@dominio.com',
+                    'direccion': 'Calle Internacional 99'
+                }
+                form = ContactoForm(data=datos)
+                self.assertTrue(form.is_valid(), f"Error con {tel}: {form.errors}")
+                self.assertTrue(form.cleaned_data['telefono'].startswith('+'))
+
+    def test_telefono_extranjero_sin_prefijo_es_rechazado(self):
+        """Verifica que un número extranjero sin '+' sea rechazado estrictamente."""
+        telefonos_sin_mas = [
+            '14155552671',  # EE.UU. sin '+'
+            '34612345678',  # España sin '+'
+            '5491123456789' # Argentina sin '+'
+        ]
+        for tel in telefonos_sin_mas:
+            with self.subTest(telefono=tel):
+                datos = {
+                    'nombre': 'Contacto Prueba',
+                    'telefono': tel,
+                    'correo': 'prueba@dominio.com',
+                    'direccion': 'Calle Principal 100'
+                }
+                form = ContactoForm(data=datos)
+                self.assertFalse(form.is_valid(), f"El número extranjero {tel} debió ser rechazado por no llevar '+'")
+                self.assertIn('telefono', form.errors)
+
+    def test_telefono_invalido_caracteres_o_incompleto(self):
+        """Verifica el rechazo de teléfonos con letras o secuencias inválidas."""
+        telefonos_malos = ['abcde', '12345', '+999 000 000', '++569123']
+        for tel_malo in telefonos_malos:
+            with self.subTest(telefono=tel_malo):
+                datos = {
+                    'nombre': 'Contacto Invalido',
+                    'telefono': tel_malo,
+                    'correo': 'invalido@correo.cl',
+                    'direccion': 'Calle Principal 100'
+                }
+                form = ContactoForm(data=datos)
+                self.assertFalse(form.is_valid())
+                self.assertIn('telefono', form.errors)
 
 
 class ContactoViewsTest(TestCase):
