@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Estilos Personalizados - Agenda de Contactos Personal
+   Paleta: Índigo / Slate moderna, diseño responsive y limpio
+   ========================================================================== */
+
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+    --secondary-color: #0ea5e9;
+    --dark-surface: #0f172a;
+    --bg-body: #f8fafc;
+    --text-primary: #1e293b;
+    --text-muted: #64748b;
+    --card-border: #e2e8f0;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.09), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --radius-default: 0.85rem;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar-custom {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    box-shadow: 0 4px 20px rgba(30, 27, 75, 0.15);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-size: 1.25rem;
+}
+
+.navbar-brand i {
+    color: #38bdf8;
+}
+
+/* Tarjetas y Contenedores */
+.custom-card {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-default);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-card:hover {
+    box-shadow: var(--card-shadow-hover);
+}
+
+.card-header-gradient {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #ffffff;
+    border-top-left-radius: var(--radius-default) !important;
+    border-top-right-radius: var(--radius-default) !important;
+    padding: 1.25rem 1.5rem;
+}
+
+/* Buscador */
+.search-wrapper {
+    position: relative;
+}
+
+.search-input {
+    border-radius: 50rem;
+    padding: 0.75rem 1.25rem 0.75rem 2.75rem;
+    border: 1.5px solid #cbd5e1;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+/* Avatares y Letras iniciales */
+.contact-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+
+.contact-avatar-lg {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+/* Botones con estilo moderno */
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.6rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Formulario */
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 0.6rem;
+    border: 1.5px solid #cbd5e1;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Mensajes de Alerta */
+.alert-custom {
+    border-radius: 0.75rem;
+    border: none;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background-color: #ffffff;
+    border-top: 1px solid var(--card-border);
+    padding: 1.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}

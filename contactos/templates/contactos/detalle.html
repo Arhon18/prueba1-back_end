@@ -1,0 +1,85 @@
+{% extends 'contactos/base.html' %}
+
+{% block title %}{{ contacto.nombre }} | Detalle de Contacto{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="custom-card overflow-hidden">
+            <!-- Encabezado con Avatar Grande -->
+            <div class="card-header-gradient p-4 text-center">
+                <div class="contact-avatar-lg mx-auto mb-3">
+                    {{ contacto.nombre|slice:":1"|upper }}
+                </div>
+                <h1 class="h4 fw-bold mb-1 text-white">{{ contacto.nombre }}</h1>
+                <p class="text-white-50 mb-0 small">
+                    <i class="bi bi-clock-history me-1"></i>Registrado el {{ contacto.fecha_creacion|date:"d de F de Y, H:i" }}
+                </p>
+            </div>
+
+            <!-- Datos Detallados del Contacto -->
+            <div class="p-4">
+                <div class="row g-3 mb-4">
+                    <!-- Teléfono -->
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted small mb-1 d-flex align-items-center gap-1">
+                                <i class="bi bi-telephone text-success"></i> Teléfono Móvil / Fijo
+                            </div>
+                            <div class="fw-semibold fs-6">
+                                <a href="tel:{{ contacto.telefono }}" class="text-decoration-none text-dark">
+                                    {{ contacto.telefono }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Correo Electrónico -->
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted small mb-1 d-flex align-items-center gap-1">
+                                <i class="bi bi-envelope-at text-primary"></i> Correo Electrónico
+                            </div>
+                            <div class="fw-semibold fs-6 text-truncate">
+                                <a href="mailto:{{ contacto.correo }}" class="text-decoration-none text-primary">
+                                    {{ contacto.correo }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="col-12">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="text-muted small mb-1 d-flex align-items-center gap-1">
+                                <i class="bi bi-geo-alt text-danger"></i> Dirección Física
+                            </div>
+                            <div class="fw-semibold fs-6 text-dark">
+                                {{ contacto.direccion }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-3 border-top">
+                    <a href="{% url 'lista_contactos' %}" class="btn btn-outline-secondary d-flex align-items-center gap-1">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Volver a Contactos</span>
+                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'editar_contacto' contacto.pk %}" class="btn btn-outline-primary d-flex align-items-center gap-1">
+                            <i class="bi bi-pencil-square"></i>
+                            <span>Editar</span>
+                        </a>
+                        <a href="{% url 'eliminar_contacto' contacto.pk %}" class="btn btn-outline-danger d-flex align-items-center gap-1">
+                            <i class="bi bi-trash"></i>
+                            <span>Eliminar</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

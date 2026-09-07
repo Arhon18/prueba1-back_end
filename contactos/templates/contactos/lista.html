@@ -1,0 +1,159 @@
+{% extends 'contactos/base.html' %}
+
+{% block title %}Mis Contactos | Agenda Personal{% endblock %}
+
+{% block content %}
+<!-- Cabecera de la Sección -->
+<div class="row align-items-center mb-4 g-3">
+    <div class="col-md-6">
+        <h1 class="h3 fw-bold mb-1 text-dark">
+            <i class="bi bi-journal-bookmark-fill text-primary me-2"></i>Mis Contactos
+        </h1>
+        <p class="text-muted mb-0">
+            Gestiona tu red de contactos personales de forma rápida y sencilla.
+        </p>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <div class="d-inline-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border shadow-sm">
+            <i class="bi bi-people-fill text-primary"></i>
+            <span class="text-muted small">Total registrados:</span>
+            <span class="badge bg-primary rounded-pill fs-6">{{ total_contactos }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Barra de Búsqueda (Requerimiento: Buscar contactos por nombre o correo) -->
+<div class="custom-card p-3 mb-4">
+    <form method="GET" action="{% url 'lista_contactos' %}" class="row g-2 align-items-center">
+        <div class="col-lg-9 col-md-8">
+            <div class="search-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="form-control search-input" 
+                    placeholder="Buscar contacto por nombre o correo electrónico..." 
+                    value="{{ query }}"
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary-custom flex-grow-1 d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-search"></i>
+                <span>Buscar</span>
+            </button>
+            {% if hay_busqueda %}
+                <a href="{% url 'lista_contactos' %}" class="btn btn-outline-secondary d-flex align-items-center gap-1" title="Limpiar filtro">
+                    <i class="bi bi-x-lg"></i>
+                    <span>Limpiar</span>
+                </a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Resumen de Resultados de Búsqueda -->
+{% if hay_busqueda %}
+    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+        <p class="text-muted mb-0">
+            Mostrando <strong>{{ encontrados }}</strong> resultado{{ encontrados|pluralize:"s" }} para la búsqueda: 
+            <span class="badge bg-light text-dark border ms-1 fs-6">"{{ query }}"</span>
+        </p>
+        <span class="text-muted small">
+            ({{ diferencia }} contacto{{ diferencia|pluralize:"s" }} excluido{{ diferencia|pluralize:"s" }})
+        </span>
+    </div>
+{% endif %}
+
+<!-- Listado de Contactos (Grid de Tarjetas) -->
+{% if contactos %}
+    <div class="row g-3">
+        {% for contacto in contactos %}
+            <div class="col-lg-4 col-md-6">
+                <div class="custom-card h-100 p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <!-- Encabezado de la Tarjeta con Avatar -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="contact-avatar">
+                                {{ contacto.nombre|slice:":1"|upper }}
+                            </div>
+                            <div class="overflow-hidden">
+                                <h2 class="h6 fw-bold mb-0 text-truncate" title="{{ contacto.nombre }}">
+                                    <a href="{% url 'detalle_contacto' contacto.pk %}" class="text-decoration-none text-dark">
+                                        {{ contacto.nombre }}
+                                    </a>
+                                </h2>
+                                <span class="badge bg-light text-secondary border small mt-1">
+                                    <i class="bi bi-calendar3 me-1"></i>{{ contacto.fecha_creacion|date:"d M, Y" }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Información de Contacto -->
+                        <div class="vstack gap-2 small text-secondary">
+                            <div class="d-flex align-items-center gap-2 text-truncate" title="{{ contacto.correo }}">
+                                <i class="bi bi-envelope-at text-primary"></i>
+                                <a href="mailto:{{ contacto.correo }}" class="text-decoration-none text-muted">
+                                    {{ contacto.correo }}
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-telephone text-success"></i>
+                                <a href="tel:{{ contacto.telefono }}" class="text-decoration-none text-muted">
+                                    {{ contacto.telefono }}
+                                </a>
+                            </div>
+                            <div class="d-flex align-items-start gap-2 text-truncate" title="{{ contacto.direccion }}">
+                                <i class="bi bi-geo-alt text-danger mt-1"></i>
+                                <span class="text-muted text-truncate">{{ contacto.direccion }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="pt-3 mt-3 border-top d-flex align-items-center justify-content-end gap-2">
+                        <a href="{% url 'detalle_contacto' contacto.pk %}" class="btn btn-sm btn-outline-primary" title="Ver detalles">
+                            <i class="bi bi-eye"></i> Detalle
+                        </a>
+                        <a href="{% url 'editar_contacto' contacto.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar contacto">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'eliminar_contacto' contacto.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar contacto">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Estado Vacío (Empty State) -->
+    <div class="custom-card text-center py-5 px-3">
+        <div class="mb-3">
+            {% if hay_busqueda %}
+                <i class="bi bi-search text-muted" style="font-size: 3.5rem;"></i>
+            {% else %}
+                <i class="bi bi-person-x text-muted" style="font-size: 3.5rem;"></i>
+            {% endif %}
+        </div>
+        {% if hay_busqueda %}
+            <h2 class="h5 fw-bold text-dark">No se encontraron resultados</h2>
+            <p class="text-muted mx-auto" style="max-width: 450px;">
+                No existe ningún contacto que coincida con <strong>"{{ query }}"</strong> por nombre o correo electrónico.
+            </p>
+            <a href="{% url 'lista_contactos' %}" class="btn btn-outline-primary mt-2">
+                <i class="bi bi-arrow-left me-1"></i> Ver todos los contactos
+            </a>
+        {% else %}
+            <h2 class="h5 fw-bold text-dark">Tu agenda está vacía</h2>
+            <p class="text-muted mx-auto" style="max-width: 450px;">
+                Aún no has agregado ningún contacto a tu agenda personal. Comienza registrando tu primer contacto con nombre, teléfono, correo y dirección.
+            </p>
+            <a href="{% url 'agregar_contacto' %}" class="btn btn-primary-custom mt-2">
+                <i class="bi bi-person-plus-fill me-1"></i> Agregar Primer Contacto
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}

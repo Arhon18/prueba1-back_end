@@ -1,0 +1,132 @@
+{% extends 'contactos/base.html' %}
+
+{% block title %}{{ accion }} | Agenda Personal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+        <div class="custom-card overflow-hidden">
+            <!-- Encabezado del Formulario -->
+            <div class="card-header-gradient">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi {% if contacto %}bi-pencil-square{% else %}bi-person-plus-fill{% endif %} fs-4"></i>
+                    <div>
+                        <h1 class="h5 fw-bold mb-0 text-white">{{ accion }}</h1>
+                        <small class="text-white-50">{{ subtitulo }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cuerpo del Formulario -->
+            <div class="p-4">
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Resumen de Errores Generales -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-custom mb-4">
+                            {% for error in form.non_field_errors %}
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+                                    <span>{{ error }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Campo: Nombre -->
+                    <div class="mb-3">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label d-flex align-items-center gap-2">
+                            <i class="bi bi-person text-primary"></i>
+                            <span>{{ form.nombre.label }}</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="text-danger small mt-1 fw-semibold">
+                                {% for error in form.nombre.errors %}
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="form-text small">Ingresa el nombre y apellido del contacto.</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Campo: Teléfono -->
+                    <div class="mb-3">
+                        <label for="{{ form.telefono.id_for_label }}" class="form-label d-flex align-items-center gap-2">
+                            <i class="bi bi-telephone text-primary"></i>
+                            <span>{{ form.telefono.label }}</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.telefono }}
+                        {% if form.telefono.errors %}
+                            <div class="text-danger small mt-1 fw-semibold">
+                                {% for error in form.telefono.errors %}
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="form-text small">Mínimo 8 dígitos, puede incluir prefijo internacional (+56).</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Campo: Correo Electrónico (Validado con email-validator) -->
+                    <div class="mb-3">
+                        <label for="{{ form.correo.id_for_label }}" class="form-label d-flex align-items-center gap-2">
+                            <i class="bi bi-envelope-at text-primary"></i>
+                            <span>{{ form.correo.label }}</span>
+                            <span class="text-danger">*</span>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-auto small">
+                                <i class="bi bi-shield-check me-1"></i>email-validator
+                            </span>
+                        </label>
+                        {{ form.correo }}
+                        {% if form.correo.errors %}
+                            <div class="text-danger small mt-1 fw-semibold">
+                                {% for error in form.correo.errors %}
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="form-text small">Formato de correo electrónico estándar (ej: usuario@dominio.com).</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Campo: Dirección -->
+                    <div class="mb-4">
+                        <label for="{{ form.direccion.id_for_label }}" class="form-label d-flex align-items-center gap-2">
+                            <i class="bi bi-geo-alt text-primary"></i>
+                            <span>{{ form.direccion.label }}</span>
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.direccion }}
+                        {% if form.direccion.errors %}
+                            <div class="text-danger small mt-1 fw-semibold">
+                                {% for error in form.direccion.errors %}
+                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="form-text small">Calle, número, comuna o ciudad de residencia.</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                        <a href="{% if contacto %}{% url 'detalle_contacto' contacto.pk %}{% else %}{% url 'lista_contactos' %}{% endif %}" class="btn btn-outline-secondary d-flex align-items-center gap-1">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Cancelar</span>
+                        </a>
+                        <button type="submit" class="btn btn-primary-custom d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-check2-circle fs-5"></i>
+                            <span>Guardar Contacto</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
