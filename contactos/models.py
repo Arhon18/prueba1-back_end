@@ -2,19 +2,12 @@
 Módulo de Modelos para la Agenda de Contactos.
 Arquitectura MVT (Modelo-Vista-Plantilla) de Django.
 
-Cumplimiento de Criterios:
-- Criterio 1.1.1: Identificación y uso de tipos de variables (CharField, EmailField, DateTimeField) y operaciones.
-- Criterio 1.1.4: Implementación del Modelo en Django.
 """
 
 from django.db import models
 
 
 class Contacto(models.Model):
-    """
-    Modelo que representa a un contacto personal en la agenda.
-    Contiene la información de nombre, teléfono, correo electrónico y dirección.
-    """
     nombre = models.CharField(
         max_length=120,
         verbose_name="Nombre Completo",
@@ -54,10 +47,6 @@ class Contacto(models.Model):
         return f"{self.nombre} ({self.correo})"
 
     def clean(self):
-        """
-        Normalización de datos antes de guardar.
-        Operaciones básicas de strings (strip, title, lower).
-        """
         if self.nombre:
             self.nombre = self.nombre.strip()
         if self.telefono:

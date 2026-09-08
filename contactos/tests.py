@@ -1,11 +1,6 @@
 """
 Suite de Pruebas Unitarias para la Agenda de Contactos.
 
-Cumplimiento de Criterios de Evaluación:
-- Criterio 7: Valida correctamente los datos de entrada (correo, teléfono, nombre).
-- Criterio 8: Utiliza herramientas de prueba automatizadas del entorno Django (TestCase).
-- Criterio 9: Cumple requerimientos: agregar, buscar (por nombre o correo) y validar correo.
-- Criterio 10: Ejecución limpia con 0 errores y cobertura completa.
 """
 
 from django.test import TestCase, Client
@@ -108,8 +103,9 @@ class ContactoViewsTest(TestCase):
     """
     Pruebas de vistas, controladores y requerimiento de búsqueda.
     Requerimientos:
-    - 'Buscar contactos por nombre o correo'
-    - 'Agregar contactos con nombre, teléfono, correo y dirección'
+    Buscar contactos por nombre o correo
+    Agregar contactos con nombre, teléfono, correo y dirección
+
     """
 
     def setUp(self):
@@ -191,3 +187,4 @@ class ContactoViewsTest(TestCase):
         response = self.client.post(reverse('eliminar_contacto', kwargs={'pk': contacto_id}))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Contacto.objects.filter(pk=contacto_id).exists())
+        

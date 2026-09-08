@@ -1,6 +1,7 @@
 """
 Rutas URL para la aplicación 'contactos'.
 Arquitectura MVT de Django: Enrutamiento de peticiones a vistas.
+
 """
 
 from django.urls import path
