@@ -1,7 +1,6 @@
 """
 Módulo de Modelos para la Agenda de Contactos.
 Arquitectura MVT (Modelo-Vista-Plantilla) de Django.
-
 """
 
 from django.db import models
@@ -45,7 +44,6 @@ class Contacto(models.Model):
         ordering = ['nombre']
 
     def __str__(self):
-        # Operación de concatenación de cadenas y formato
         return f"{self.nombre} ({self.correo})"
 
     def clean(self):
@@ -75,3 +73,42 @@ class Contacto(models.Model):
         if self.direccion:
             self.direccion = self.direccion.strip()
         super().clean()
+
+
+class NotaContacto(models.Model):
+    """
+    Modelo relacional para notas y observaciones asociadas a un contacto.
+    Permite el uso de TabularInline en Django Admin para gestionar múltiples notas por contacto.
+    """
+    contacto = models.ForeignKey(
+        Contacto,
+        on_delete=models.CASCADE,
+        related_name='notas',
+        verbose_name="Contacto"
+    )
+    titulo = models.CharField(
+        max_length=100,
+        verbose_name="Título / Asunto",
+        help_text="Breve resumen de la nota o recordatorio"
+    )
+    contenido = models.TextField(
+        verbose_name="Detalle de la Nota",
+        help_text="Información detallada, recordatorio o anotación relevante"
+    )
+    es_importante = models.BooleanField(
+        default=False,
+        verbose_name="¿Es Importante?",
+        help_text="Marca esta nota como prioritaria o destacada"
+    )
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de Creación"
+    )
+
+    class Meta:
+        verbose_name = "Nota de Contacto"
+        verbose_name_plural = "Notas del Contacto"
+        ordering = ['-fecha_creacion']
+
+    def __str__(self):
+        return f"{self.titulo} - {self.contacto.nombre}"

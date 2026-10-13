@@ -3,26 +3,84 @@
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
+{% block extrahead %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Tipografía y colores del tema corporativo */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    #header {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        border-bottom: 3px solid #2563eb !important;
+        padding: 12px 24px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+    .breadcrumbs {
+        background: #f8fafc !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #64748b !important;
+        font-weight: 500;
+    }
+    .module h2, .module caption, .inline-group h2 {
+        background: #f1f5f9 !important;
+        color: #1e293b !important;
+        border-left: 4px solid #2563eb !important;
+        font-weight: 600 !important;
+    }
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: #2563eb !important;
+        color: #ffffff !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover {
+        background: #1d4ed8 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3) !important;
+    }
+    .button.default, input[type=submit].default, .submit-row input.default {
+        background: #059669 !important;
+    }
+    .button.default:hover, input[type=submit].default:hover {
+        background: #047857 !important;
+    }
+    #changelist-filter {
+        background: #f8fafc !important;
+        border-left: 1px solid #e2e8f0 !important;
+    }
+    #changelist-filter h2 {
+        background: #1e293b !important;
+        color: #ffffff !important;
+    }
+</style>
+{% endblock %}
+
 {% block branding %}
-<div id="site-name" style="display: flex; align-items: center; gap: 10px;">
-    <span style="font-size: 1.5rem; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold;">
-        &#128214;
-    </span>
+<div id="site-name" style="display: flex; align-items: center; gap: 12px;">
+    <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; width: 40px; height: 40px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+        📒
+    </div>
     <div>
-        <a href="{% url 'admin:index' %}" style="font-size: 1.25rem; font-weight: 700; color: #f8fafc; text-decoration: none;">
+        <a href="{% url 'admin:index' %}" style="font-size: 1.3rem; font-weight: 700; color: #f8fafc; text-decoration: none; letter-spacing: -0.02em;">
             {{ site_header|default:_('Django administration') }}
         </a>
-        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 400; margin-top: -2px;">
-            Sistema de Gestión &bull; Caso 3: Agenda de Contactos
+        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 400; margin-top: 2px;">
+            Sistema de Administración &bull; Evaluación Sumativa 2 (ES02) &bull; INACAP
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block userlinks %}
-    <span style="margin-right: 15px;">
-        <a href="{% url 'lista_contactos' %}" style="color: #60a5fa; font-weight: 600; text-decoration: underline;" target="_blank">
-            &larr; Ir a la Agenda Web
+    <span style="margin-right: 18px;">
+        <a href="{% url 'lista_contactos' %}" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(96, 165, 250, 0.4); color: #93c5fd; padding: 4px 10px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px; transition: 0.2s;" target="_blank">
+            <span>🌐</span> Ir a la Agenda Web
         </a>
     </span>
     {{ block.super }}
