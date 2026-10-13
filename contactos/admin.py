@@ -70,6 +70,11 @@ class ContactoAdmin(admin.ModelAdmin):
     inlines = [NotaContactoInline]
     actions = [exportar_contactos_a_csv]
 
+    class Media:
+        css = {
+            'all': ('contactos/css/custom_admin.css',)
+        }
+
     list_display = (
         'nombre_badge',
         'telefono_link',
@@ -164,6 +169,11 @@ class NotaContactoAdmin(admin.ModelAdmin):
     Administración independiente para las notas de contactos.
     Permite filtrar por prioridad y buscar por contacto.
     """
+    class Media:
+        css = {
+            'all': ('contactos/css/custom_admin.css',)
+        }
+
     list_display = ('titulo', 'contacto', 'es_importante_badge', 'fecha_creacion')
     list_filter = ('es_importante', 'fecha_creacion')
     search_fields = ('titulo', 'contenido', 'contacto__nombre', 'contacto__correo')

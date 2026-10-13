@@ -281,4 +281,20 @@ class ContactoViewsTest(TestCase):
         self.assertIn('Tulio Triviño', contenido)
         self.assertIn('tulio@titirilquen.cl', contenido)
 
+    def test_admin_dashboard_stats_templatetag(self):
+        """Verifica que el templatetag get_admin_dashboard_stats devuelva el conteo real de datos."""
+        from contactos.templatetags.admin_dashboard_tags import get_admin_dashboard_stats
+        from contactos.models import NotaContacto
+        NotaContacto.objects.create(
+            contacto=self.contacto1,
+            titulo="Reunión Importante",
+            contenido="Preparar pauta",
+            es_importante=True
+        )
+        stats = get_admin_dashboard_stats()
+        self.assertEqual(stats['total_contactos'], 3)
+        self.assertEqual(stats['total_notas'], 1)
+        self.assertEqual(stats['notas_importantes'], 1)
+        self.assertIn('db_label', stats)
+
         

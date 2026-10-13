@@ -1,0 +1,128 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_dashboard_tags %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% get_admin_dashboard_stats as stats %}
+
+  <!-- KPI Metric Cards -->
+  <div class="admin-stats-grid">
+    <div class="admin-stat-card">
+      <div class="stat-icon-wrapper">
+        <span>👥</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.total_contactos }}</div>
+        <div class="stat-label">Contactos Registrados</div>
+      </div>
+    </div>
+
+    <div class="admin-stat-card stat-success">
+      <div class="stat-icon-wrapper">
+        <span>📝</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.total_notas }}</div>
+        <div class="stat-label">Notas y Observaciones</div>
+      </div>
+    </div>
+
+    <div class="admin-stat-card stat-warning">
+      <div class="stat-icon-wrapper">
+        <span>⭐</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number">{{ stats.notas_importantes }}</div>
+        <div class="stat-label">Notas Prioritarias</div>
+      </div>
+    </div>
+
+    <div class="admin-stat-card stat-purple">
+      <div class="stat-icon-wrapper">
+        <span>🗄️</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-number" style="font-size: 16px; font-weight: 700; padding-top: 4px;">{{ stats.db_label }}</div>
+        <div class="stat-label">Estado de Almacenamiento</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de accesos directos rápidos -->
+  <div class="admin-quick-actions">
+    <span class="quick-action-title">Acciones Rápidas:</span>
+    <a href="{% url 'admin:contactos_contacto_add' %}" class="btn-quick-action primary">
+      <span>➕</span>
+      <span>Nuevo Contacto</span>
+    </a>
+    <a href="{% url 'admin:contactos_notacontacto_add' %}" class="btn-quick-action">
+      <span>📝</span>
+      <span>Nueva Nota</span>
+    </a>
+    <a href="{% url 'admin:contactos_contacto_changelist' %}" class="btn-quick-action">
+      <span>📋</span>
+      <span>Ver Todos los Contactos</span>
+    </a>
+    <a href="{% url 'lista_contactos' %}" target="_blank" class="btn-quick-action">
+      <span>🌐</span>
+      <span>Ver Frontend Web</span>
+    </a>
+  </div>
+
+  <!-- Listado de Modelos y Aplicaciones instaladas -->
+  {% include "admin/app_list.html" with app_list=app_list %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module" style="border-radius: var(--radius-lg); overflow: hidden;">
+        <h2 style="border-left: 4px solid var(--primary); font-size: 14px; font-weight: 700;">
+            🕒 {% translate 'Recent actions' %}
+        </h2>
+        <div style="padding: 16px;">
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                Últimos movimientos registrados en el panel:
+            </p>
+            {% load log %}
+            {% get_admin_log 8 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">
+                {% translate 'None available' %}
+            </p>
+            {% else %}
+            <ul class="actionlist" style="list-style: none; padding-left: 0; font-size: 13px;">
+            {% for entry in admin_log %}
+                <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}" style="padding: 6px 0; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div>
+                        {% if entry.is_addition %}
+                            <span style="color: var(--success); font-weight: bold;">+</span>
+                        {% elif entry.is_change %}
+                            <span style="color: var(--primary); font-weight: bold;">&bull;</span>
+                        {% elif entry.is_deletion %}
+                            <span style="color: var(--danger); font-weight: bold;">&minus;</span>
+                        {% endif %}
+                        <span style="font-weight: 600;">{{ entry.object_repr }}</span>
+                        <div style="font-size: 11px; color: var(--text-muted);">
+                            {{ entry.content_type }}
+                        </div>
+                    </div>
+                    {% if entry.is_change and not entry.is_deletion %}
+                        <a href="{{ entry.get_admin_url }}" style="font-size: 11px; color: var(--primary); text-decoration: none; font-weight: 600;">Ver &rarr;</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

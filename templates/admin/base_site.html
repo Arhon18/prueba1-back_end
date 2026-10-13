@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/base.html" %}
 {% load static %}
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
@@ -7,80 +7,37 @@
 {{ block.super }}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    /* Tipografía y colores del tema corporativo */
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-    }
-    #header {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
-        border-bottom: 3px solid #2563eb !important;
-        padding: 12px 24px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    }
-    .breadcrumbs {
-        background: #f8fafc !important;
-        border-bottom: 1px solid #e2e8f0 !important;
-        color: #64748b !important;
-        font-weight: 500;
-    }
-    .module h2, .module caption, .inline-group h2 {
-        background: #f1f5f9 !important;
-        color: #1e293b !important;
-        border-left: 4px solid #2563eb !important;
-        font-weight: 600 !important;
-    }
-    .button, input[type=submit], input[type=button], .submit-row input, a.button {
-        background: #2563eb !important;
-        color: #ffffff !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-        border: none !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover {
-        background: #1d4ed8 !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3) !important;
-    }
-    .button.default, input[type=submit].default, .submit-row input.default {
-        background: #059669 !important;
-    }
-    .button.default:hover, input[type=submit].default:hover {
-        background: #047857 !important;
-    }
-    #changelist-filter {
-        background: #f8fafc !important;
-        border-left: 1px solid #e2e8f0 !important;
-    }
-    #changelist-filter h2 {
-        background: #1e293b !important;
-        color: #ffffff !important;
-    }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'contactos/css/custom_admin.css' %}">
 {% endblock %}
 
 {% block branding %}
-<div id="site-name" style="display: flex; align-items: center; gap: 12px;">
-    <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; width: 40px; height: 40px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+<div id="site-name" style="display: flex; align-items: center; gap: 14px;">
+    <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); border: 1px solid rgba(255, 255, 255, 0.2);">
         📒
     </div>
     <div>
-        <a href="{% url 'admin:index' %}" style="font-size: 1.3rem; font-weight: 700; color: #f8fafc; text-decoration: none; letter-spacing: -0.02em;">
+        <a href="{% url 'admin:index' %}" style="font-size: 1.35rem; font-weight: 800; color: #f8fafc; text-decoration: none; letter-spacing: -0.02em; display: block; line-height: 1.2;">
             {{ site_header|default:_('Django administration') }}
         </a>
-        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 400; margin-top: 2px;">
-            Sistema de Administración &bull; Evaluación Sumativa 2 (ES02) &bull; INACAP
+        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+            <span style="background: rgba(37, 99, 235, 0.25); color: #93c5fd; padding: 1px 7px; border-radius: 4px; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(147, 197, 253, 0.3);">ES02</span>
+            <span>Evaluación Sumativa 2 &bull; Caso 3: Agenda de Contactos</span>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block userlinks %}
-    <span style="margin-right: 18px;">
-        <a href="{% url 'lista_contactos' %}" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(96, 165, 250, 0.4); color: #93c5fd; padding: 4px 10px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px; transition: 0.2s;" target="_blank">
-            <span>🌐</span> Ir a la Agenda Web
+    <span style="margin-right: 14px;">
+        <a href="{% url 'lista_contactos' %}" class="btn-nav-web" target="_blank" title="Abrir la aplicación web pública">
+            <span>🌐</span>
+            <span>Ir a la Agenda Web</span>
+            <span style="font-size: 10px; opacity: 0.8;">&nearr;</span>
         </a>
     </span>
     {{ block.super }}
