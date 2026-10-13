@@ -1,9 +1,6 @@
 """
 Configuración del Panel Administrativo de Django para 'contactos'.
 
-Cumplimiento de Criterios:
-- Criterio 4: Implementación de componentes estándar de Django.
-- Criterio 6: Código debidamente documentado y comentado.
 """
 
 from django.contrib import admin
