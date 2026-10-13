@@ -22,20 +22,14 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Franja Tricolor Bandera de Chile -->
-    <div class="tricolor-stripe"></div>
-
     <!-- Barra de Navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'lista_contactos' %}">
-                <span class="chile-star-badge">
-                    <i class="bi bi-star-fill"></i>
+                <span class="brand-mark">
+                    <i class="bi bi-person-lines-fill"></i>
                 </span>
                 <span class="fw-bold">Agenda Personal</span>
-                <span class="fiestas-patrias-pill d-none d-sm-inline-flex">
-                    <i class="bi bi-flag-fill text-danger"></i> ¡Fiestas Patrias! 🇨🇱
-                </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Navegación">
                 <span class="navbar-toggler-icon"></span>
@@ -91,7 +85,7 @@
     <footer>
         <div class="container text-center">
             <p class="mb-1 fw-bold text-dark">
-                🇨🇱 Agenda de Contactos Personal &bull; Edición Especial Fiestas Patrias 🇨🇱
+                Agenda de Contactos Personal &bull; Gestión simple y organizada
             </p>
             <p class="text-muted mb-0 small">
                 Evaluación Backend &bull; Arquitectura Django MVT &bull; Python + email-validator + phonenumbers
