@@ -1,0 +1,133 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Iniciar Sesión | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login modern-admin-login{% endblock %}
+
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="login-wrapper">
+    <div class="login-card">
+        <!-- Cabecera de la Tarjeta con Branding -->
+        <div class="login-header text-center">
+            <div class="login-logo-icon">
+                📒
+            </div>
+            <h1 class="login-title">Panel de Control</h1>
+            <p class="login-subtitle">
+                Agenda de Contactos Personal &bull; Backend
+            </p>
+            <div class="login-badge-pill">
+                <span>INACAP</span>
+                <span class="badge-separator">&bull;</span>
+                <span>Evaluación Sumativa 2</span>
+            </div>
+        </div>
+
+        <!-- Mensajes de Error de Validación -->
+        {% if form.errors and not form.non_field_errors %}
+        <div class="login-alert login-alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>Error al iniciar sesión:</strong>
+                <p class="mb-0">Por favor corrige los datos ingresados a continuación.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="login-alert login-alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>Acceso denegado:</strong>
+                {% for error in form.non_field_errors %}
+                <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <div class="login-alert login-alert-warning">
+            <span class="alert-icon">🔒</span>
+            <div>
+                <strong>Sesión no autorizada:</strong>
+                <p class="mb-0">Estás autenticado como <strong>{{ username }}</strong>, pero esta cuenta no tiene permisos de administración.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Formulario de Autenticación -->
+        <form action="{{ app_path }}" method="post" id="login-form" class="login-form">
+            {% csrf_token %}
+
+            <div class="login-field-group">
+                <label for="id_username" class="login-label">
+                    <span>👤 Usuario Administrador</span>
+                </label>
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        name="username" 
+                        id="id_username" 
+                        autocapitalize="none" 
+                        autocomplete="username" 
+                        maxlength="150" 
+                        required 
+                        placeholder="Ej. admin" 
+                        value="{{ form.username.value|default:'' }}"
+                        class="login-input"
+                    >
+                </div>
+                {% if form.username.errors %}
+                <span class="field-error-text">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <div class="login-field-group">
+                <label for="id_password" class="login-label">
+                    <span>🔑 Contraseña</span>
+                </label>
+                <div class="input-container">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="id_password" 
+                        autocomplete="current-password" 
+                        required 
+                        placeholder="Ingresa tu contraseña" 
+                        class="login-input"
+                    >
+                </div>
+                {% if form.password.errors %}
+                <span class="field-error-text">{{ form.password.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <!-- Botón de Envío -->
+            <button type="submit" class="login-submit-btn">
+                <span>Ingresar al Sistema</span>
+                <span class="btn-arrow">&rarr;</span>
+            </button>
+        </form>
+
+        <!-- Pie de la Tarjeta con Enlace de Regreso a la Web -->
+        <div class="login-footer">
+            <a href="{% url 'lista_contactos' %}" class="login-back-link">
+                <span>&larr; Volver a la Agenda Web</span>
+            </a>
+            <div class="login-security-tag">
+                <span>🔒 Acceso seguro con Django Security</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
