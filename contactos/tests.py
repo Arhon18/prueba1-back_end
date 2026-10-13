@@ -253,4 +253,32 @@ class ContactoViewsTest(TestCase):
         response = self.client.post(reverse('eliminar_contacto', kwargs={'pk': contacto_id}))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Contacto.objects.filter(pk=contacto_id).exists())
+
+    def test_paginacion_contactos(self):
+        """Verifica el funcionamiento de la paginación con más de 6 contactos."""
+        for i in range(10):
+            Contacto.objects.create(
+                nombre=f"Contacto Extra {i}",
+                telefono=f"+56 9 1000 000{i}",
+                correo=f"extra{i}@test.com",
+                direccion=f"Calle Falsa {i}"
+            )
+        response = self.client.get(reverse('lista_contactos'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('page_obj', response.context)
+        self.assertEqual(len(response.context['contactos']), 6)
+        self.assertTrue(response.context['page_obj'].has_next())
+
+    def test_exportacion_csv_admin_action(self):
+        """Verifica que la acción de exportación a CSV en admin retorne un archivo CSV válido."""
+        from contactos.admin import exportar_contactos_a_csv
+        queryset = Contacto.objects.all()
+        response = exportar_contactos_a_csv(None, None, queryset)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv; charset=utf-8-sig')
+        self.assertIn('attachment; filename="contactos_agenda.csv"', response['Content-Disposition'])
+        contenido = response.content.decode('utf-8-sig')
+        self.assertIn('Tulio Triviño', contenido)
+        self.assertIn('tulio@titirilquen.cl', contenido)
+
         

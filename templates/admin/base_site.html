@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<div id="site-name" style="display: flex; align-items: center; gap: 10px;">
+    <span style="font-size: 1.5rem; background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold;">
+        &#128214;
+    </span>
+    <div>
+        <a href="{% url 'admin:index' %}" style="font-size: 1.25rem; font-weight: 700; color: #f8fafc; text-decoration: none;">
+            {{ site_header|default:_('Django administration') }}
+        </a>
+        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 400; margin-top: -2px;">
+            Sistema de Gestión &bull; Caso 3: Agenda de Contactos
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block userlinks %}
+    <span style="margin-right: 15px;">
+        <a href="{% url 'lista_contactos' %}" style="color: #60a5fa; font-weight: 600; text-decoration: underline;" target="_blank">
+            &larr; Ir a la Agenda Web
+        </a>
+    </span>
+    {{ block.super }}
+{% endblock %}
