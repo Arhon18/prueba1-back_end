@@ -1,12 +1,17 @@
 #!/bin/bash
-# Script de construcción para Vercel
+set -e
+
+echo "==> Creando entorno virtual..."
+python3 -m venv .venv
+source .venv/bin/activate
+
 echo "==> Instalando dependencias..."
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
-echo "==> Recolectando archivos estáticos con WhiteNoise..."
-python3 manage.py collectstatic --noinput --clear
+echo "==> Recolectando archivos estáticos..."
+python manage.py collectstatic --noinput --clear
 
-echo "==> Ejecutando migraciones de base de datos..."
-python3 manage.py migrate --noinput
+echo "==> Ejecutando migraciones..."
+python manage.py migrate --noinput
 
 echo "==> Despliegue listo."
