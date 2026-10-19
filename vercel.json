@@ -2,37 +2,24 @@
   "version": 2,
   "builds": [
     {
-<<<<<<< HEAD
       "src": "core/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb" }
-=======
-      "src": "agenda_project/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
     },
     {
       "src": "build_files.sh",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles"
-      }
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
+      "config": { "distDir": "staticfiles" }
     }
   ],
   "routes": [
     {
-<<<<<<< HEAD
-      "src": "/(.*)",
-      "dest": "core/wsgi.py"
-=======
       "src": "/static/(.*)",
       "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "agenda_project/wsgi.py"
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
+      "dest": "core/wsgi.py"
     }
   ]
 }

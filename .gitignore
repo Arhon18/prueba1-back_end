@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -57,26 +56,10 @@ cover/
 *.pot
 
 # Django stuff:
-=======
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-.venv/
-.env
-
-# Django
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-<<<<<<< HEAD
 
 # Flask stuff:
 instance/
@@ -201,17 +184,3 @@ cython_debug/
 db.sqlite3
 staticfiles/
 .env
-=======
-media/
-staticfiles/
-
-# Vercel
-.vercel/
-
-# IDEs
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-.DS_Store
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80

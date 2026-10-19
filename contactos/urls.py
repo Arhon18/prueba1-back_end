@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-=======
-"""
-Rutas URL para la aplicación 'contactos'.
-Arquitectura MVT de Django: Enrutamiento de peticiones a vistas.
-
-"""
-
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 from django.urls import path
 from . import views
 
 urlpatterns = [
-<<<<<<< HEAD
     # Contactos - CRUD principal
     path('', views.contacto_list, name='contacto_list'),
     path('contactos/nuevo/', views.contacto_create, name='contacto_create'),
@@ -32,11 +22,4 @@ urlpatterns = [
     # Categorías
     path('categorias/', views.categoria_list, name='categoria_list'),
     path('categorias/<int:pk>/eliminar/', views.categoria_delete, name='categoria_delete'),
-=======
-    path('', views.lista_contactos, name='lista_contactos'),
-    path('nuevo/', views.agregar_contacto, name='agregar_contacto'),
-    path('contacto/<int:pk>/', views.detalle_contacto, name='detalle_contacto'),
-    path('contacto/<int:pk>/editar/', views.editar_contacto, name='editar_contacto'),
-    path('contacto/<int:pk>/eliminar/', views.eliminar_contacto, name='eliminar_contacto'),
->>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 ]
