@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 Django>=5.0
 django-crispy-forms>=2.0
 crispy-bootstrap5>=2024.2
 python-dotenv>=1.0.0
 psycopg2-binary>=2.9.9
 dj-database-url>=2.1.0
+=======
+Django>=5.0,<7.0
+email-validator>=2.0.0
+phonenumbers>=9.0.0
+python-dotenv>=1.0.0
+dj-database-url>=2.1.0
+psycopg2-binary>=2.9.9
+>>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 whitenoise>=6.6.0

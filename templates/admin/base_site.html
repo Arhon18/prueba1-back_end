@@ -1,0 +1,44 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'contactos/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name" style="display: flex; align-items: center; gap: 14px;">
+    <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); border: 1px solid rgba(255, 255, 255, 0.2);">
+        📒
+    </div>
+    <div>
+        <a href="{% url 'admin:index' %}" style="font-size: 1.35rem; font-weight: 800; color: #f8fafc; text-decoration: none; letter-spacing: -0.02em; display: block; line-height: 1.2;">
+            {{ site_header|default:_('Django administration') }}
+        </a>
+        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500; margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+            <span style="background: rgba(37, 99, 235, 0.25); color: #93c5fd; padding: 1px 7px; border-radius: 4px; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(147, 197, 253, 0.3);">ES02</span>
+            <span>Evaluación Sumativa 2 &bull; Caso 3: Agenda de Contactos</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block userlinks %}
+    <span style="margin-right: 14px;">
+        <a href="{% url 'lista_contactos' %}" class="btn-nav-web" target="_blank" title="Abrir la aplicación web pública">
+            <span>🌐</span>
+            <span>Ir a la Agenda Web</span>
+            <span style="font-size: 10px; opacity: 0.8;">&nearr;</span>
+        </a>
+    </span>
+    {{ block.super }}
+{% endblock %}

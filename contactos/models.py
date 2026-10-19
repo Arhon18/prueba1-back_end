@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils import timezone
@@ -55,10 +56,52 @@ class Contacto(models.Model):
     
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
     fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Última Actualización")
+=======
+"""
+Módulo de Modelos para la Agenda de Contactos.
+Arquitectura MVT (Modelo-Vista-Plantilla) de Django.
+"""
+
+from django.db import models
+import phonenumbers
+from phonenumbers import NumberParseException
+
+
+class Contacto(models.Model):
+    nombre = models.CharField(
+        max_length=120,
+        verbose_name="Nombre Completo",
+        help_text="Nombre y apellido del contacto"
+    )
+    telefono = models.CharField(
+        max_length=30,
+        verbose_name="Teléfono",
+        help_text="Número chileno (+56 9...) o extranjero obligatorio con prefijo '+' (ej: +1...)"
+    )
+    correo = models.EmailField(
+        max_length=150,
+        verbose_name="Correo Electrónico",
+        help_text="Dirección de correo electrónico válida"
+    )
+    direccion = models.CharField(
+        max_length=250,
+        verbose_name="Dirección",
+        help_text="Dirección física o residencia del contacto"
+    )
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de Registro"
+    )
+    fecha_actualizacion = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Última Actualización"
+    )
+>>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 
     class Meta:
         verbose_name = "Contacto"
         verbose_name_plural = "Contactos"
+<<<<<<< HEAD
         ordering = ['apellido', 'nombre']
 
     def __str__(self):
@@ -107,10 +150,45 @@ class TelefonoSecundario(models.Model):
 
     def __str__(self):
         return f"{self.get_tipo_display()}: {self.numero}"
+=======
+        ordering = ['nombre']
+
+    def __str__(self):
+        return f"{self.nombre} ({self.correo})"
+
+    def clean(self):
+        """
+        Normalización de datos antes de guardar.
+        Operaciones básicas de strings y normalización telefónica con phonenumbers.
+        """
+        if self.nombre:
+            self.nombre = self.nombre.strip().title()
+        if self.telefono:
+            tel_clean = self.telefono.strip()
+            try:
+                if tel_clean.startswith('+'):
+                    p = phonenumbers.parse(tel_clean, None)
+                else:
+                    p = phonenumbers.parse(tel_clean, "CL")
+                if phonenumbers.is_valid_number(p):
+                    self.telefono = phonenumbers.format_number(
+                        p, phonenumbers.PhoneNumberFormat.INTERNATIONAL
+                    )
+                else:
+                    self.telefono = tel_clean
+            except NumberParseException:
+                self.telefono = tel_clean
+        if self.correo:
+            self.correo = self.correo.strip().lower()
+        if self.direccion:
+            self.direccion = self.direccion.strip()
+        super().clean()
+>>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
 
 
 class NotaContacto(models.Model):
     """
+<<<<<<< HEAD
     Bitácora o notas fechadas asociadas a un contacto (inline en Django Admin).
     """
     contacto = models.ForeignKey(Contacto, on_delete=models.CASCADE, related_name="bitacora_notas", verbose_name="Contacto")
@@ -125,3 +203,40 @@ class NotaContacto(models.Model):
 
     def __str__(self):
         return f"{self.titulo} ({self.fecha_registro.strftime('%d/%m/%Y')})"
+=======
+    Modelo relacional para notas y observaciones asociadas a un contacto.
+    Permite el uso de TabularInline en Django Admin para gestionar múltiples notas por contacto.
+    """
+    contacto = models.ForeignKey(
+        Contacto,
+        on_delete=models.CASCADE,
+        related_name='notas',
+        verbose_name="Contacto"
+    )
+    titulo = models.CharField(
+        max_length=100,
+        verbose_name="Título / Asunto",
+        help_text="Breve resumen de la nota o recordatorio"
+    )
+    contenido = models.TextField(
+        verbose_name="Detalle de la Nota",
+        help_text="Información detallada, recordatorio o anotación relevante"
+    )
+    es_importante = models.BooleanField(
+        default=False,
+        verbose_name="¿Es Importante?",
+        help_text="Marca esta nota como prioritaria o destacada"
+    )
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de Creación"
+    )
+
+    class Meta:
+        verbose_name = "Nota de Contacto"
+        verbose_name_plural = "Notas del Contacto"
+        ordering = ['-fecha_creacion']
+
+    def __str__(self):
+        return f"{self.titulo} - {self.contacto.nombre}"
+>>>>>>> 608b130aaff29eebc63ffd6d14385d2a72557e80
